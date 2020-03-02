@@ -1,3 +1,7 @@
+resource "aws_api_gateway_account" "demo" {
+  cloudwatch_role_arn = aws_iam_role.iam_for_apigateway.arn
+}
+
 resource "aws_api_gateway_rest_api" "rest_api" {
   name = "Serverless API"
 }
