@@ -18,5 +18,6 @@ resource "aws_lambda_function" "test_lambda" {
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
   # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
   source_code_hash = data.archive_file.service.output_sha
-  runtime = "nodejs12.x"
+  runtime = "python3.8"
+  timeout = 1
 }
