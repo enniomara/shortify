@@ -55,7 +55,8 @@ def handle_found(item):
     response = {
         "statusCode": "302",
         'headers': {
-            "Location": item['location']
+            "Location": item['location'],
+            "Cache-Control": "private,max-age=84600"
         },
     }
     return response
