@@ -10,9 +10,13 @@ table = dynamodb.Table('Shortify')
 
 
 def handler(event, context):
+    path = event['path'].lstrip('/')
+    if path == "":
+        return handle_not_found()
+
     response = table.get_item(
         Key={
-            'name': 'sdsf',
+            'name': path,
         }
     )
     if 'Item' not in response:
