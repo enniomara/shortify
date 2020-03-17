@@ -6,34 +6,17 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   name = "Serverless API"
 }
 
-resource "aws_api_gateway_resource" "proxy" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
-  path_part   = "{proxy+}"
-
-}
-
-resource "aws_api_gateway_method" "proxy" {
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  resource_id   = aws_api_gateway_resource.proxy.id
-  http_method   = "GET"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "lambda_integration" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  resource_id = aws_api_gateway_method.proxy.resource_id
-  http_method = aws_api_gateway_method.proxy.http_method
-
-  type                    = "AWS_PROXY"
-  integration_http_method = "POST"
-  uri                     = aws_lambda_function.test_lambda.invoke_arn
-
+module "proxy-endpoint" {
+  source                     = "./module/api-endpoint"
+  rest_api_id                = aws_api_gateway_rest_api.rest_api.id
+  parent_id                  = aws_api_gateway_rest_api.rest_api.root_resource_id
+  path                       = "{proxy+}"
+  lambda_function_invoke_arn = aws_lambda_function.test_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_deployment" "example" {
   depends_on = [
-    aws_api_gateway_integration.lambda_integration,
+    module.proxy-endpoint.integration
   ]
 
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -53,16 +36,6 @@ resource "aws_lambda_permission" "apigw" {
   # within the API Gateway REST API.
   source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*"
 }
-
-# resource "aws_api_gateway_method_response" "response_302" {
-#   rest_api_id = aws_api_gateway_rest_api.rest_api.id
-#   resource_id = aws_api_gateway_resource.proxy.id
-#   http_method = aws_api_gateway_method.proxy.http_method
-#   status_code = "302"
-#   response_parameters = {
-#     "method.response.header.Location" = true
-#   }
-# }
 
 output "base_url" {
   value = aws_api_gateway_deployment.example.invoke_url
