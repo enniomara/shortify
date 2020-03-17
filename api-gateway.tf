@@ -7,11 +7,12 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 }
 
 module "proxy-endpoint" {
-  source                     = "./module/api-endpoint"
-  rest_api_id                = aws_api_gateway_rest_api.rest_api.id
-  parent_id                  = aws_api_gateway_rest_api.rest_api.root_resource_id
-  path                       = "{proxy+}"
-  lambda_function_invoke_arn = aws_lambda_function.test_lambda.invoke_arn
+  source          = "./module/api-endpoint"
+  rest_api        = aws_api_gateway_rest_api.rest_api
+  rest_api_id     = aws_api_gateway_rest_api.rest_api.id
+  parent_id       = aws_api_gateway_rest_api.rest_api.root_resource_id
+  path            = "{proxy+}"
+  lambda_function = aws_lambda_function.test_lambda
 }
 
 resource "aws_api_gateway_deployment" "example" {
