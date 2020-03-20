@@ -10,7 +10,7 @@ table = dynamodb.Table('Shortify')
 
 
 def handler(event, context):
-    path = event['path'].lstrip('/')
+    path = event['path'].lstrip('/').lower()
     if path == "":
         return handle_not_found()
 
