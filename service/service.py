@@ -1,4 +1,5 @@
 import json
+import re
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
@@ -8,11 +9,17 @@ dynamodb = boto3.resource("dynamodb")
 
 table = dynamodb.Table('Shortify')
 
+# Define what characters are allowed in path
+path_regex = re.compile(r'[^a-z0-9-.]')
+
 
 def handler(event, context):
     path = event['path'].lstrip('/').lower()
     if path == "":
         return handle_not_found()
+
+    if bool(path_regex.search(path)):
+        return handle_forbidden("Path contains diallowed characters")
 
     response = table.get_item(
         Key={
@@ -44,6 +51,18 @@ def handle_not_found():
         'statusCode': "404",
         'body': json.dumps({
             'message': 'Could not find the given alias.'
+        }),
+        "isBase64Encoded": False
+    }
+    return response
+
+
+def handle_forbidden(reason=""):
+    print("handle not found")
+    response = {
+        'statusCode': "403",
+        'body': json.dumps({
+            'message': reason
         }),
         "isBase64Encoded": False
     }
