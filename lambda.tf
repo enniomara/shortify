@@ -10,7 +10,7 @@ data "archive_file" "service" {
 
 resource "aws_lambda_function" "test_lambda" {
   filename      = local.lambda_zip_location
-  function_name = "example"
+  function_name = "shortify-path"
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = "service.handler"
 
