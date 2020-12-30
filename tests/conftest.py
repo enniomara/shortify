@@ -27,4 +27,3 @@ def create_table(dynamodb, monkeypatch):
         AttributeDefinitions=[{'AttributeName': 'name','AttributeType': 'S'}],
     )
     yield
-
