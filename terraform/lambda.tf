@@ -4,7 +4,7 @@ locals {
 
 data "archive_file" "service" {
   type        = "zip"
-  source_dir  = "service/"
+  source_dir  = "../service/"
   output_path = local.lambda_zip_location
 }
 
