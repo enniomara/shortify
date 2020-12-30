@@ -1,8 +1,6 @@
 import json
 import re
 
-from boto3.dynamodb.conditions import Attr, Key
-from botocore.exceptions import ClientError
 from . import common
 
 # Define what characters are allowed in path

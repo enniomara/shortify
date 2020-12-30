@@ -23,7 +23,7 @@ def dynamodb(aws_credentials):
 @moto.mock_dynamodb2
 @pytest.fixture()
 def create_table(dynamodb, monkeypatch):
-    table = dynamodb.create_table(
+    _ = dynamodb.create_table(
         TableName="Shortify",
         KeySchema=[{"AttributeName": "name", "KeyType": "HASH"}],
         AttributeDefinitions=[{"AttributeName": "name", "AttributeType": "S"}],
