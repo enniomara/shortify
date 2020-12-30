@@ -37,3 +37,9 @@ def test_disallowed_characters(create_table, dynamodb, path, location):
     response = service.handler(event=apigw_event, context={})
 
     assert response['statusCode'] == '403'
+
+def test_empty_path(create_table, dynamodb):
+    apigw_event = tests.helpers.make_apigateway_event('')
+    response = service.handler(event=apigw_event, context={})
+
+    assert response['statusCode'] == '404'
