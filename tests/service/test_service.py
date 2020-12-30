@@ -30,6 +30,7 @@ def test_lambda_handler(create_table, dynamodb, path, location):
         ('name_1', ''),
         ('File-1ö', ''),
         ('*$ö', ''),
+        ('url/to/file', ''),
     ]
 )
 def test_disallowed_characters(create_table, dynamodb, path, location):
