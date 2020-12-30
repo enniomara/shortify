@@ -4,6 +4,8 @@ import boto3
 import moto
 import pytest
 
+import src.shortify.common as src_common
+
 
 @pytest.fixture(scope="function")
 def aws_credentials():
@@ -24,7 +26,7 @@ def dynamodb(aws_credentials):
 @pytest.fixture()
 def create_table(dynamodb, monkeypatch):
     _ = dynamodb.create_table(
-        TableName="Shortify",
+        TableName=src_common.TABLE_NAME,
         KeySchema=[{"AttributeName": "name", "KeyType": "HASH"}],
         AttributeDefinitions=[{"AttributeName": "name", "AttributeType": "S"}],
     )

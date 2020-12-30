@@ -1,6 +1,7 @@
 import json
 
 import src.shortify._entries as _entries
+import src.shortify.common as src_common
 import tests.helpers
 
 
@@ -12,7 +13,7 @@ def test_lambda_handler(create_table, dynamodb):
     ]
 
     # seed the table with example items
-    table = dynamodb.Table("Shortify")
+    table = dynamodb.Table(src_common.TABLE_NAME)
     with table.batch_writer() as batch:
         for item in items:
             batch.put_item(

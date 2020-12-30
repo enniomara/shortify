@@ -1,5 +1,6 @@
 import pytest
 
+import src.shortify.common as src_common
 import src.shortify.service as service
 import tests.helpers
 
@@ -13,7 +14,7 @@ import tests.helpers
     ],
 )
 def test_lambda_handler(create_table, dynamodb, path, location):
-    table = dynamodb.Table("Shortify")
+    table = dynamodb.Table(src_common.TABLE_NAME)
     _ = table.put_item(Item={"name": path.lower(), "location": location})
 
     apigw_event = tests.helpers.make_apigateway_event(path)
