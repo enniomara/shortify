@@ -24,6 +24,13 @@ def test_lambda_handler(create_table, dynamodb, path, location):
     assert response['statusCode'] == '302'
     assert response['headers']['Location'] == location
 
+def test_item_not_found(create_table, dynamodb):
+    apigw_event = tests.helpers.make_apigateway_event('nonexistant-path')
+    response = service.handler(event=apigw_event, context={})
+
+    assert response['statusCode'] == '404'
+
+
 @pytest.mark.parametrize(
     'path,location',
     [
