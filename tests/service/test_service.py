@@ -23,3 +23,17 @@ def test_lambda_handler(create_table, dynamodb, path, location):
 
     assert response['statusCode'] == '302'
     assert response['headers']['Location'] == location
+
+@pytest.mark.parametrize(
+    'path,location',
+    [
+        ('name_1', ''),
+        ('File-1ö', ''),
+        ('*$ö', ''),
+    ]
+)
+def test_disallowed_characters(create_table, dynamodb, path, location):
+    apigw_event = tests.helpers.make_apigateway_event(path)
+    response = service.handler(event=apigw_event, context={})
+
+    assert response['statusCode'] == '403'
