@@ -3,13 +3,10 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
 from botocore.exceptions import ClientError
-
-dynamodb = boto3.resource("dynamodb")
-
-table = dynamodb.Table('Shortify')
-
+from . import common
 
 def handler(event, context):
+    table = common.initialize_table()
 
     query = table.scan(AttributesToGet=['name'])
 

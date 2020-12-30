@@ -1,19 +1,17 @@
 import json
 import re
 
-import boto3
 from boto3.dynamodb.conditions import Attr, Key
 from botocore.exceptions import ClientError
-
-dynamodb = boto3.resource("dynamodb")
-
-table = dynamodb.Table('Shortify')
+from . import common
 
 # Define what characters are allowed in path
 path_regex = re.compile(r'[^a-z0-9-.]')
 
 
 def handler(event, context):
+    table = common.initialize_table()
+
     path = event['path'].lstrip('/').lower()
     if path == "":
         return handle_not_found()
