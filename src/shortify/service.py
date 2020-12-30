@@ -29,16 +29,6 @@ def handler(event, context):
     return handle_found(response["Item"])
 
 
-def handle_error():
-    print("handle error")
-    response = {
-        "statusCode": "500",
-        "body": json.dumps({"message": "Error: See logs for more info."}),
-        "isBase64Encoded": False,
-    }
-    return response
-
-
 def handle_not_found():
     print("handle not found")
     response = {
