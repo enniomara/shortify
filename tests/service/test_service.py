@@ -1,4 +1,5 @@
 import pytest
+
 import src.shortify.service as service
 import tests.helpers
 
