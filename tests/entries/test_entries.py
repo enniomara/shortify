@@ -1,7 +1,7 @@
 import json
 
-import src.shortify._entries as _entries
 import src.shortify.common as src_common
+import src.shortify.entries as entries
 import tests.helpers
 
 
@@ -21,7 +21,7 @@ def test_lambda_handler(create_table, dynamodb):
             )
 
     apigw_event = tests.helpers.make_apigateway_event("_entries")
-    response = _entries.handler(event=apigw_event, context={})
+    response = entries.get_all_shortcut_names(event=apigw_event, table=table)
     body = json.loads(response["body"])
 
     # lower because the database stores them in lower-case
