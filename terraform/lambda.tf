@@ -12,7 +12,7 @@ resource "aws_lambda_function" "test_lambda" {
   filename      = local.lambda_zip_location
   function_name = "shortify-path"
   role          = aws_iam_role.iam_for_lambda.arn
-  handler       = "shortify.service.handler"
+  handler       = "shortify.service.path_handler"
 
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "_entries" {
   filename      = local.lambda_zip_location
   function_name = "shortify-entries"
   role          = aws_iam_role.iam_for_lambda.arn
-  handler       = "shortify._entries.handler"
+  handler       = "shortify.service.entries_handler"
 
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
