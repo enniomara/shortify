@@ -1,7 +1,7 @@
 import pytest
 
 import src.shortify.common as src_common
-import src.shortify.service as service
+import src.shortify.path as path_service
 import tests.helpers
 
 
@@ -18,15 +18,17 @@ def test_lambda_handler(create_table, dynamodb, path, location):
     _ = table.put_item(Item={"name": path.lower(), "location": location})
 
     apigw_event = tests.helpers.make_apigateway_event(path)
-    response = service.handler(event=apigw_event, context={})
+    response = path_service.sub_handler(event=apigw_event, table=table)
 
     assert response["statusCode"] == "302"
     assert response["headers"]["Location"] == location
 
 
 def test_item_not_found(create_table, dynamodb):
+    table = dynamodb.Table(src_common.TABLE_NAME)
+
     apigw_event = tests.helpers.make_apigateway_event("nonexistant-path")
-    response = service.handler(event=apigw_event, context={})
+    response = path_service.sub_handler(event=apigw_event, table=table)
 
     assert response["statusCode"] == "404"
 
@@ -41,14 +43,18 @@ def test_item_not_found(create_table, dynamodb):
     ],
 )
 def test_disallowed_characters(create_table, dynamodb, path, location):
+    table = dynamodb.Table(src_common.TABLE_NAME)
+
     apigw_event = tests.helpers.make_apigateway_event(path)
-    response = service.handler(event=apigw_event, context={})
+    response = path_service.sub_handler(event=apigw_event, table=table)
 
     assert response["statusCode"] == "403"
 
 
 def test_empty_path(create_table, dynamodb):
+    table = dynamodb.Table(src_common.TABLE_NAME)
+
     apigw_event = tests.helpers.make_apigateway_event("")
-    response = service.handler(event=apigw_event, context={})
+    response = path_service.sub_handler(event=apigw_event, table=table)
 
     assert response["statusCode"] == "404"
