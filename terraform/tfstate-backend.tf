@@ -38,9 +38,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
 terraform {
   backend "s3" {
     # Replace this with your bucket name!
-    bucket         = "shortify-tfstate"
-    key            = "global/s3/terraform.tfstate"
-    region         = "eu-north-1"
+    bucket = "shortify-tfstate"
+    key    = "global/s3/terraform.tfstate"
+    region = "eu-north-1"
     # Replace this with your DynamoDB table name!
     dynamodb_table = "shortify-tfstate-locks"
     encrypt        = true
