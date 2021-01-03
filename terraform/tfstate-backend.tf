@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "tfstate" {
-  bucket = "shortify-tfstate"
+  bucket_prefix = "shortify-tfstate-"
   # Enable versioning so we can see the full revision history of our
   # state files
   versioning {
@@ -38,7 +38,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 terraform {
   backend "s3" {
     # Replace this with your bucket name!
-    bucket = "shortify-tfstate"
+    bucket = "shortify-tfstate-20210103211109527500000001"
     key    = "global/s3/terraform.tfstate"
     region = "eu-north-1"
     # Replace this with your DynamoDB table name!
