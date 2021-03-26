@@ -19,7 +19,7 @@ def aws_credentials():
 @pytest.fixture(scope="function")
 def dynamodb(aws_credentials):
     with moto.mock_dynamodb2():
-        yield boto3.resource("dynamodb", region_name='eu-north-1')
+        yield boto3.resource("dynamodb", region_name="eu-north-1")
 
 
 @moto.mock_dynamodb2
