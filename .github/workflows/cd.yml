@@ -25,5 +25,5 @@ jobs:
         run: terraform init
       - name: Workspace switch
         run: terraform workspace select staging
-      - name: Plan
-        run: terraform plan
+      - name: Apply
+        run: terraform apply -auto-approve
