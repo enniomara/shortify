@@ -34,5 +34,6 @@ resource "aws_api_gateway_deployment" "example" {
 }
 
 output "base_url" {
-  value = aws_api_gateway_deployment.example.invoke_url
+  value     = aws_api_gateway_deployment.example.invoke_url
+  sensitive = true
 }
