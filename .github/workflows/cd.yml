@@ -8,6 +8,9 @@ jobs:
   deployToStage:
     name: Deploy to staging
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
     steps:
       - uses: hashicorp/setup-terraform@v1
         with:
