@@ -2,7 +2,7 @@ name: Continous Delivery
 
 on:
   push:
-    branches: [cd]
+    branches: [main]
 
 jobs:
   deployToStage:
