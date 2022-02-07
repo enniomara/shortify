@@ -6,8 +6,14 @@ name: lambda-tests
 on:
   push:
     branches: [ main ]
+    paths:
+      - src/**
+      - tests/**
   pull_request:
     branches: [ main ]
+    paths:
+      - src/**
+      - tests/**
 
 jobs:
   build:
