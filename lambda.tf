@@ -4,7 +4,7 @@ locals {
 
 data "archive_file" "service" {
   type        = "zip"
-  source_dir  = "../src/"
+  source_dir  = "${path.module}/src/"
   output_path = local.lambda_zip_location
   excludes    = ["__pycache__", ".pytest_cache"]
 }
