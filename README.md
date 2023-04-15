@@ -75,23 +75,7 @@ Requirements
 `credentials` file. Read more
 [here](https://www.terraform.io/docs/providers/aws/index.html#authentication).
 
-
-Steps
------
-1. Initialize terraform
-
-    ```
-    $ terraform init
-    ```
-
-2. Deploy the infrastructure. When this command finishes running, it will
-output a link where API requests can be sent. See
-[here](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html)
-if you want the API to be accessible via a custom domain.
-
-    ```
-    $ terraform apply
-    ```
+See the instructions in [examples/example-deployment](examples/example-deployment/) for a full deployment example you can run.
 
 Related
 =======
