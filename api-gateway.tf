@@ -15,6 +15,23 @@ resource "aws_apigatewayv2_stage" "rest_api" {
   name        = "default"
   auto_deploy = true
 }
+
+resource "aws_apigatewayv2_authorizer" "jwt" {
+  count            = var.authorizer_configuration == null ? 0 : 1
+  api_id           = aws_apigatewayv2_api.rest_api.id
+  authorizer_type  = "JWT"
+  identity_sources = ["$request.header.Authorization"]
+  name             = "example-authorizer"
+
+  dynamic "jwt_configuration" {
+    for_each = var.authorizer_configuration == null ? [] : [1]
+    content {
+      issuer   = var.authorizer_configuration.issuer
+      audience = var.authorizer_configuration.audience
+    }
+  }
+}
+
 module "proxy-endpoint" {
   source          = "./module/api-endpoint"
   api             = aws_apigatewayv2_api.rest_api

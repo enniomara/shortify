@@ -10,6 +10,9 @@ resource "aws_apigatewayv2_route" "example" {
   route_key = var.api_path
 
   target = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+
+  authorizer_id      = var.authorizer == null ? null : var.authorizer.id
+  authorization_type = var.authorizer == null ? null : "JWT"
 }
 
 resource "aws_lambda_permission" "rest" {
