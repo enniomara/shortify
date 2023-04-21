@@ -37,6 +37,8 @@ module "proxy-endpoint" {
   api             = aws_apigatewayv2_api.rest_api
   api_path        = "GET /{proxy+}"
   lambda_function = aws_lambda_function.test_lambda
+
+  authorizer = try(aws_apigatewayv2_authorizer.jwt[0], null)
 }
 
 module "entries-endpoint" {
@@ -44,4 +46,6 @@ module "entries-endpoint" {
   api             = aws_apigatewayv2_api.rest_api
   api_path        = "GET /_entries"
   lambda_function = aws_lambda_function._entries
+
+  authorizer = try(aws_apigatewayv2_authorizer.jwt[0], null)
 }
