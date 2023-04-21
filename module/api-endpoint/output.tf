@@ -1,3 +1,3 @@
 output "integration" {
-  value = aws_api_gateway_integration.lambda_integration
+  value = aws_apigatewayv2_integration.lambda
 }

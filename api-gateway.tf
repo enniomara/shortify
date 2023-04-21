@@ -2,38 +2,29 @@ resource "aws_api_gateway_account" "demo" {
   cloudwatch_role_arn = aws_iam_role.iam_for_apigateway.arn
 }
 
-resource "aws_api_gateway_rest_api" "rest_api" {
-  name = "Serverless API"
+resource "aws_apigatewayv2_api" "rest_api" {
+  name          = "Serverless API"
+  protocol_type = "HTTP"
+
+  # to enable requests through custom domain
+  disable_execute_api_endpoint = true
 }
 
+resource "aws_apigatewayv2_stage" "rest_api" {
+  api_id      = aws_apigatewayv2_api.rest_api.id
+  name        = "default"
+  auto_deploy = true
+}
 module "proxy-endpoint" {
   source          = "./module/api-endpoint"
-  rest_api        = aws_api_gateway_rest_api.rest_api
-  path            = "{proxy+}"
+  api             = aws_apigatewayv2_api.rest_api
+  api_path        = "GET /{proxy+}"
   lambda_function = aws_lambda_function.test_lambda
 }
 
 module "entries-endpoint" {
   source          = "./module/api-endpoint"
-  rest_api        = aws_api_gateway_rest_api.rest_api
-  path            = "_entries"
+  api             = aws_apigatewayv2_api.rest_api
+  api_path        = "GET /_entries"
   lambda_function = aws_lambda_function._entries
-}
-
-resource "aws_api_gateway_deployment" "example" {
-  depends_on = [
-    module.proxy-endpoint.integration,
-    module.entries-endpoint.integration,
-  ]
-
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  stage_name  = "test"
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-output "base_url" {
-  value     = aws_api_gateway_deployment.example.invoke_url
-  sensitive = true
 }
