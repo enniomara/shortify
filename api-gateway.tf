@@ -8,6 +8,12 @@ resource "aws_apigatewayv2_api" "rest_api" {
 
   # to enable requests through custom domain
   disable_execute_api_endpoint = true
+  cors_configuration {
+    allow_origins = ["http://localhost:3000"]
+    allow_methods = ["GET"]
+    allow_headers = ["Authorization"]
+    allow_credentials = true
+  }
 }
 
 resource "aws_apigatewayv2_stage" "rest_api" {
