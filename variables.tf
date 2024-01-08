@@ -3,7 +3,8 @@ variable "authorizer_configuration" {
     issuer   = string
     audience = list(string)
   })
-  default = null
+  default     = null
+  description = "Specifies the JWT authorizer configuration used to protect routes. A nil configuration means no authorization."
 
   validation {
     condition     = var.authorizer_configuration != null ? length(var.authorizer_configuration.issuer) > 0 : true
