@@ -16,3 +16,11 @@ variable "authorizer_configuration" {
     error_message = "Audience must not be empty"
   }
 }
+
+variable "frontend" {
+  type = object({
+    bucket = string
+    bucketURL = string
+    role   = string
+  })
+}

@@ -9,9 +9,9 @@ resource "aws_apigatewayv2_api" "rest_api" {
   # to enable requests through custom domain
   disable_execute_api_endpoint = true
   cors_configuration {
-    allow_origins = ["http://localhost:3000"]
-    allow_methods = ["GET"]
-    allow_headers = ["Authorization"]
+    allow_origins     = ["http://localhost:3000"]
+    allow_methods     = ["GET"]
+    allow_headers     = ["Authorization"]
     allow_credentials = true
   }
 }
@@ -55,3 +55,21 @@ module "entries-endpoint" {
 
   authorizer = try(aws_apigatewayv2_authorizer.jwt[0], null)
 }
+
+resource "aws_apigatewayv2_integration" "frontend" {
+  api_id           = aws_apigatewayv2_api.rest_api.id
+  integration_type = "HTTP_PROXY"
+  integration_method = "GET"
+  integration_uri  = var.frontend.bucketURL
+}
+
+resource "aws_apigatewayv2_route" "example" {
+  api_id    = aws_apigatewayv2_api.rest_api.id
+  route_key = "GET /"
+
+  target = "integrations/${aws_apigatewayv2_integration.frontend.id}"
+
+  # authorizer_id      = var.authorizer == null ? null : var.authorizer.id
+  # authorization_type = var.authorizer == null ? null : "JWT"
+}
+
